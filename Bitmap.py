@@ -267,10 +267,10 @@ class Bitmap(object):
         print(xf, "valor x2")
         print(yf, "valor y2")
 
-        x1 = math.floor(self.transform_x(xo))
-        x2 = math.floor(self.transform_x(xf))
-        y1 = math.floor(self.transform_y(yo))
-        y2 = math.floor(self.transform_y(yf))
+        x1 = math.floor(xo)
+        x2 = math.floor(xf)
+        y1 = math.floor(yo)
+        y2 = math.floor(yf)
 
         dy = abs(y2 - y1)
         dx = abs(x2 - x1)
