@@ -6,7 +6,6 @@ from Bitmap import *
 
 
 class SoftwareRender(object):
-
     """
     Class that use bitmap to abstract a software render
     """
@@ -21,8 +20,6 @@ class SoftwareRender(object):
         :return:
         """
         self.window = ""
-
-
 
     def glCreateWindow(self, width, height):
         """
@@ -126,3 +123,6 @@ class SoftwareRender(object):
 
     def line_brese(self, xo, yo, xf, yf):
         self.window.line(xo, yo, xf, yf)
+
+    def monte_carlo(self, lim_xo, lim_yo, lim_xf, lim_yf):
+        self.window.monte_carlo_method(lim_xo, lim_yo, lim_xf, lim_yf)

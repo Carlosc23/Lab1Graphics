@@ -7,7 +7,7 @@ import struct
 import sys
 
 from math import ceil
-
+import numpy as np # importando numpy
 
 def char(c):
     return struct.pack("=c", c.encode('ascii'))
@@ -43,7 +43,7 @@ class Bitmap(object):
         self.r = 255
         self.g = 0
         self.b = 0
-        self.pointSize = 30
+        self.pointSize = 2
         self.vr = 255
         self.vg = 200
         self.vb = 200
@@ -304,3 +304,29 @@ class Bitmap(object):
             if offset >= threshold:
                 y += 1 if y1 < y2 else -1
                 threshold += 1 * 2 * dx
+
+    def monte_carlo_method(self, lim_xo, lim_yo, lim_xf,lim_yf):
+        self.glColor(1, 1, 1)
+        if lim_xo > lim_xf:
+            aux = lim_xo
+            lim_xo = lim_xf
+            lim_xf = aux
+        if lim_yo > lim_yf:
+            aux = lim_yo
+            lim_yo = lim_yf
+            lim_yf = aux
+        print(lim_xo)
+        print(lim_xf)
+        print(lim_yo)
+        print(lim_yf)
+        for i in range(100000):
+            x= np.random.uniform(-1, 1)
+            y = np.random.uniform(-1, 1)
+            print("babylon")
+            print(x)
+            print(y)
+            print(self.transform_x(x))
+            print(self.transform_y(y))
+            if lim_xf > self.transform_x(x) > lim_xo and lim_yf > self.transform_y(y) > lim_yo:
+                self.glVertex(x, y)
+
