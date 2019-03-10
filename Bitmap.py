@@ -7,7 +7,8 @@ import struct
 import sys
 
 from math import ceil
-import numpy as np # importando numpy
+import numpy as np  # importando numpy
+
 
 def char(c):
     return struct.pack("=c", c.encode('ascii'))
@@ -250,13 +251,13 @@ class Bitmap(object):
     def transform_x(self, x):
         dx = x * (self.vpWidth / 2)
         realX_vp_size = (self.vpWidth / 2) + dx
-        realX = realX_vp_size  + self.vpX
+        realX = realX_vp_size + self.vpX
         return realX
 
     def transform_y(self, y):
         dy = y * (self.vpHeight / 2)
         realY_vp_size = (self.vpHeight / 2) + dy
-        realY = realY_vp_size  + self.vpY
+        realY = realY_vp_size + self.vpY
         return realY
 
     def line(self, xo, yo, xf, yf):
@@ -305,7 +306,31 @@ class Bitmap(object):
                 y += 1 if y1 < y2 else -1
                 threshold += 1 * 2 * dx
 
-    def monte_carlo_method(self, lim_xo, lim_yo, lim_xf,lim_yf):
+    def read_poly(self, filename):
+        with open(filename) as f:
+            lines = f.read().splitlines()
+        vertices = []
+        for line in lines:
+            if line:
+                prefix, value = line.split(' ', 1)
+                if prefix == 'v':
+                    vertices.append(list(map(int, value.split(' '))))
+        return vertices
+
+    def draw_poly(self, vertices):
+
+        size_list_vertices = len(vertices)
+        print("tama")
+        print(size_list_vertices)
+        for i in range(size_list_vertices):
+            xo, yo = vertices[i]
+            if i == size_list_vertices - 1:
+                xf, yf = vertices[0]
+            else:
+                xf, yf = vertices[i + 1]
+            self.line(xo, yo, xf, yf)
+
+    def monte_carlo_method(self, lim_xo, lim_yo, lim_xf, lim_yf):
         self.glColor(1, 1, 1)
         if lim_xo > lim_xf:
             aux = lim_xo
@@ -320,7 +345,7 @@ class Bitmap(object):
         print(lim_yo)
         print(lim_yf)
         for i in range(100000):
-            x= np.random.uniform(-1, 1)
+            x = np.random.uniform(-1, 1)
             y = np.random.uniform(-1, 1)
             print("babylon")
             print(x)
@@ -329,4 +354,3 @@ class Bitmap(object):
             print(self.transform_y(y))
             if lim_xf > self.transform_x(x) > lim_xo and lim_yf > self.transform_y(y) > lim_yo:
                 self.glVertex(x, y)
-
