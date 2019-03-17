@@ -435,8 +435,11 @@ class Bitmap(object):
             j = i
         return oddNodes
 
-    def monte_carlo_method3(self, vertices):
-        self.glColor(1, 1, 1)
+    def monte_carlo_method3(self, vertices,color=False):
+        if color:
+            self.glColor(1, 1, 1)
+        else:
+            self.glColor(1, 0, 0)
         print("--------------------")
         print(len(vertices))
         vertices_size = len(vertices)
@@ -452,7 +455,7 @@ class Bitmap(object):
         listay = list(map(lambda y: self.transform_yn(y), list_y))
         print(listax)
         print(listay)
-        for i in range(30000):
+        for i in range(250000):
             x = np.random.uniform(lim_xo2, lim_xf2)
             y = np.random.uniform(lim_yo2, lim_yf2)
             a = self.point_polygon(vertices_size, listax, listay, x, y)

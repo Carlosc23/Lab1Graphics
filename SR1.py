@@ -136,5 +136,5 @@ class SoftwareRender(object):
     def monte_carlo2(self, vertices):
         self.window.monte_carlo_method2(vertices)
 
-    def monte_carlo3(self, vertices):
-        self.window.monte_carlo_method3(vertices)
+    def monte_carlo3(self, vertices,color):
+        self.window.monte_carlo_method3(vertices,color)
