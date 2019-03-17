@@ -7,7 +7,7 @@ import struct
 import sys
 
 from math import ceil
-import numpy as np  # importando numpy
+#import numpy as np  # importando numpy
 
 
 def char(c):
@@ -456,8 +456,8 @@ class Bitmap(object):
         print(listax)
         print(listay)
         for i in range(250000):
-            x = np.random.uniform(lim_xo2, lim_xf2)
-            y = np.random.uniform(lim_yo2, lim_yf2)
+            x = random.uniform(lim_xo2, lim_xf2)
+            y = random.uniform(lim_yo2, lim_yf2)
             a = self.point_polygon(vertices_size, listax, listay, x, y)
             if a:
                 self.glVertex(x, y)
