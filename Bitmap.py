@@ -26,6 +26,18 @@ def color(r, g, b):
     return bytes([b, g, r])
 
 
+def read_poly(filename):
+    with open(filename) as f:
+        lines = f.read().splitlines()
+    vertices = []
+    for line in lines:
+        if line:
+            prefix, value = line.split(' ', 1)
+            if prefix == 'v':
+                vertices.append(list(map(int, value.split(' '))))
+    return vertices
+
+
 class Bitmap(object):
     """
     Class that abstract a bitmap
@@ -260,13 +272,19 @@ class Bitmap(object):
         realY = realY_vp_size + self.vpY
         return realY
 
-    def line(self, xo, yo, xf, yf):
+    def transform_xn(self, realX):
+        realX_vp_size = realX - self.vpX
+        dx = realX_vp_size - ((self.vpWidth / 2))
+        x = dx / (self.vpWidth / 2)
+        return x
 
-        print("**********************")
-        print(xo, "valor x1")
-        print(yo, "valor y1 ")
-        print(xf, "valor x2")
-        print(yf, "valor y2")
+    def transform_yn(self, realY):
+        realY_vp_size = realY - self.vpY
+        dy = realY_vp_size - ((self.vpHeight / 2))
+        y = dy / (self.vpHeight / 2)
+        return y
+
+    def line(self, xo, yo, xf, yf):
 
         x1 = math.floor(xo)
         x2 = math.floor(xf)
@@ -306,22 +324,9 @@ class Bitmap(object):
                 y += 1 if y1 < y2 else -1
                 threshold += 1 * 2 * dx
 
-    def read_poly(self, filename):
-        with open(filename) as f:
-            lines = f.read().splitlines()
-        vertices = []
-        for line in lines:
-            if line:
-                prefix, value = line.split(' ', 1)
-                if prefix == 'v':
-                    vertices.append(list(map(int, value.split(' '))))
-        return vertices
-
     def draw_poly(self, vertices):
 
         size_list_vertices = len(vertices)
-        print("tama")
-        print(size_list_vertices)
         for i in range(size_list_vertices):
             xo, yo = vertices[i]
             if i == size_list_vertices - 1:
@@ -329,6 +334,130 @@ class Bitmap(object):
             else:
                 xf, yf = vertices[i + 1]
             self.line(xo, yo, xf, yf)
+
+    def div_vertices(self, vertices):
+        list_x = []
+        list_y = []
+        size_list_vertices = len(vertices)
+        for i in range(size_list_vertices):
+            xo, yo = vertices[i]
+            list_x.append(xo)
+            list_y.append(yo)
+        return list_x, list_y
+
+    def draw_poly2(self, vertices):
+        linesx = []
+        linesy = []
+        size_list_vertices = len(vertices)
+        for i in range(size_list_vertices):
+            xo, yo = vertices[i]
+            if i == size_list_vertices - 1:
+                xf, yf = vertices[0]
+            else:
+                xf, yf = vertices[i + 1]
+            linesx.append([xo, xf])
+            linesy.append([yo, yf])
+        return linesx, linesy
+
+    def monte_carlo_method2(self, vertices):
+        self.glColor(1, 1, 1)
+
+        list_x, list_y = self.div_vertices(vertices)
+        lim_xo2, lim_xf2 = min(list_x), max(list_x)
+        lim_yo2, lim_yf2 = min(list_y), max(list_y)
+        lim_xo2, lim_xf2 = self.transform_xn(lim_xo2), self.transform_xn(lim_xf2)
+        lim_yo2, lim_yf2 = self.transform_yn(lim_yo2), self.transform_yn(lim_yf2)
+        print("puta")
+        listax, listay = self.draw_poly2(vertices)
+        print(listax)
+        print(listay)
+        print("lles")
+        """for i in range(5):
+            x = np.random.uniform(lim_xo2, lim_xf2)
+            y = np.random.uniform(lim_yo2, lim_yf2)
+            conta = 0
+            print("----")
+            print(self.transform_x(x))
+            print(self.transform_y(y))
+            for j, k in zip(listax, listay):
+                lim_xo, lim_xf = min(j), max(j)
+                lim_yo, lim_yf = min(k), max(k)
+                if lim_xf > self.transform_x(x) > lim_xo and lim_yf > self.transform_y(y) > lim_yo:
+                    #conta +=1
+                    print(lim_xo,lim_yo,lim_xf,lim_yf)
+                    self.glVertex(x, y)
+                else:
+                    conta = 0
+                if conta == 2 :
+                    self.glVertex(x, y)
+                    break
+                """
+        print("alan")
+        for i in range(5):
+            x = np.random.uniform(lim_xo2, lim_xf2)
+            y = np.random.uniform(lim_yo2, lim_yf2)
+            print("-----")
+            print("-----")
+            conta = False
+            for j in vertices:
+                """if self.transform_xn(x) < j[0] and self.transform_yn(y) < j[1]:
+                    print(j[0],j[1])
+                    conta = True
+                else:
+                    conta = False
+                    break"""
+                print("Entrando-->", self.transform_x(x), self.transform_y(y))
+                print(j)
+                print([self.transform_x(lim_xo2), self.transform_y(lim_yo2)])
+                print([self.transform_x(lim_xf2), self.transform_y(lim_yf2)])
+                if j != [self.transform_x(lim_xo2), self.transform_y(lim_yo2)] and j != [self.transform_x(lim_xf2),
+                                                                                         self.transform_y(lim_yf2)]:
+
+                    if j[0] >= self.transform_x(lim_xo2) and j[1] > self.transform_y(lim_yo2):
+                        print("al")
+                        print(j)
+                        if self.transform_x(x) > j[0] and self.transform_y(y) > j[1]:
+                            self.glVertex(x, y)
+                    elif j[0] < self.transform_x(lim_xf2) and j[1] > self.transform_y(lim_yf2):
+                        if self.transform_x(x) < j[0] and self.transform_y(y) < j[1]:
+                            self.glVertex(x, y)
+
+    def point_polygon(self, vertices, polyX, polyY, x, y):
+        i = 0
+        j = vertices - 1
+        oddNodes = False
+        for i in range(0, vertices, 1):
+            if ((polyY[i] < y and polyY[j] >= y
+                 or polyY[j] < y and polyY[i] >= y)
+                    and (polyX[i] <= x or polyX[j] <= x)):
+                if (polyX[i] + (y - polyY[i]) / (polyY[j] - polyY[i]) * (polyX[j] - polyX[i]) < x):
+                    oddNodes = not oddNodes
+            j = i
+        return oddNodes
+
+    def monte_carlo_method3(self, vertices):
+        self.glColor(1, 1, 1)
+        print("--------------------")
+        print(len(vertices))
+        vertices_size = len(vertices)
+        list_x, list_y = self.div_vertices(vertices)
+        lim_xo2, lim_xf2 = min(list_x), max(list_x)
+        lim_yo2, lim_yf2 = min(list_y), max(list_y)
+        lim_xo2, lim_xf2 = self.transform_xn(lim_xo2), self.transform_xn(lim_xf2)
+        lim_yo2, lim_yf2 = self.transform_yn(lim_yo2), self.transform_yn(lim_yf2)
+        print("puta")
+        listax, listay = self.draw_poly2(vertices)
+
+        listax = list(map(lambda x: self.transform_xn(x), list_x))
+        listay = list(map(lambda y: self.transform_yn(y), list_y))
+        print(listax)
+        print(listay)
+        for i in range(30000):
+            x = np.random.uniform(lim_xo2, lim_xf2)
+            y = np.random.uniform(lim_yo2, lim_yf2)
+            a = self.point_polygon(vertices_size, listax, listay, x, y)
+            if a:
+                self.glVertex(x, y)
 
     def monte_carlo_method(self, lim_xo, lim_yo, lim_xf, lim_yf):
         self.glColor(1, 1, 1)
@@ -344,7 +473,7 @@ class Bitmap(object):
         print(lim_xf)
         print(lim_yo)
         print(lim_yf)
-        for i in range(100000):
+        for i in range(1000000):
             x = np.random.uniform(-1, 1)
             y = np.random.uniform(-1, 1)
             print("babylon")
