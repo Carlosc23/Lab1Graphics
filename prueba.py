@@ -10,7 +10,7 @@ np.random.seed(1984) # para poder replicar el random
 # Ejemplo: Aproximando el valor de pi - área de un círculo de
 # radio = 1.
 
-def mc_pi_aprox(N=100):
+def mc_pi_aprox(N=1000):
     plt.figure(figsize=(8,8))  # tamaño de la figura
     x, y = np.random.uniform(-1, 1, size=(2, N))
     interior = (x**2 + y**2) <= 1
