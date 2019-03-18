@@ -130,11 +130,5 @@ class SoftwareRender(object):
     def draw_poly(self, vertices):
         self.window.draw_poly(vertices)
 
-    def monte_carlo(self, lim_xo, lim_yo, lim_xf, lim_yf):
-        self.window.monte_carlo_method(lim_xo, lim_yo, lim_xf, lim_yf)
-
-    def monte_carlo2(self, vertices):
-        self.window.monte_carlo_method2(vertices)
-
     def monte_carlo3(self, vertices,color):
         self.window.monte_carlo_method3(vertices,color)

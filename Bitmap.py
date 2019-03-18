@@ -114,14 +114,14 @@ class Bitmap(object):
         :param y: relative vertical coord of the point
         :return:
         """
-        print("pointSize")
-        print(self.pointSize)
+        #print("pointSize")
+        #print(self.pointSize)
         if self.vpHeight != 0 and self.vpWidth != 0:
             xx = x * ((self.vpWidth - self.pointSize) / 2)
             yy = y * ((self.vpHeight - self.pointSize) / 2)
             localX = self.vpX + int((self.vpWidth - self.pointSize) / 2) + int(xx)
             localY = self.vpY + int((self.vpHeight - self.pointSize) / 2) + int(yy)
-            print(x, y, localX, localY)
+            #print(x, y, localX, localY)
             for x in range(self.pointSize):
                 for y in range(self.pointSize):
                     self.point(localX + x, localY + y, color(self.vr, self.vb, self.vg))
@@ -359,68 +359,6 @@ class Bitmap(object):
             linesy.append([yo, yf])
         return linesx, linesy
 
-    def monte_carlo_method2(self, vertices):
-        self.glColor(1, 1, 1)
-
-        list_x, list_y = self.div_vertices(vertices)
-        lim_xo2, lim_xf2 = min(list_x), max(list_x)
-        lim_yo2, lim_yf2 = min(list_y), max(list_y)
-        lim_xo2, lim_xf2 = self.transform_xn(lim_xo2), self.transform_xn(lim_xf2)
-        lim_yo2, lim_yf2 = self.transform_yn(lim_yo2), self.transform_yn(lim_yf2)
-        print("puta")
-        listax, listay = self.draw_poly2(vertices)
-        print(listax)
-        print(listay)
-        print("lles")
-        """for i in range(5):
-            x = np.random.uniform(lim_xo2, lim_xf2)
-            y = np.random.uniform(lim_yo2, lim_yf2)
-            conta = 0
-            print("----")
-            print(self.transform_x(x))
-            print(self.transform_y(y))
-            for j, k in zip(listax, listay):
-                lim_xo, lim_xf = min(j), max(j)
-                lim_yo, lim_yf = min(k), max(k)
-                if lim_xf > self.transform_x(x) > lim_xo and lim_yf > self.transform_y(y) > lim_yo:
-                    #conta +=1
-                    print(lim_xo,lim_yo,lim_xf,lim_yf)
-                    self.glVertex(x, y)
-                else:
-                    conta = 0
-                if conta == 2 :
-                    self.glVertex(x, y)
-                    break
-                """
-        print("alan")
-        for i in range(5):
-            x = np.random.uniform(lim_xo2, lim_xf2)
-            y = np.random.uniform(lim_yo2, lim_yf2)
-            print("-----")
-            print("-----")
-            conta = False
-            for j in vertices:
-                """if self.transform_xn(x) < j[0] and self.transform_yn(y) < j[1]:
-                    print(j[0],j[1])
-                    conta = True
-                else:
-                    conta = False
-                    break"""
-                print("Entrando-->", self.transform_x(x), self.transform_y(y))
-                print(j)
-                print([self.transform_x(lim_xo2), self.transform_y(lim_yo2)])
-                print([self.transform_x(lim_xf2), self.transform_y(lim_yf2)])
-                if j != [self.transform_x(lim_xo2), self.transform_y(lim_yo2)] and j != [self.transform_x(lim_xf2),
-                                                                                         self.transform_y(lim_yf2)]:
-
-                    if j[0] >= self.transform_x(lim_xo2) and j[1] > self.transform_y(lim_yo2):
-                        print("al")
-                        print(j)
-                        if self.transform_x(x) > j[0] and self.transform_y(y) > j[1]:
-                            self.glVertex(x, y)
-                    elif j[0] < self.transform_x(lim_xf2) and j[1] > self.transform_y(lim_yf2):
-                        if self.transform_x(x) < j[0] and self.transform_y(y) < j[1]:
-                            self.glVertex(x, y)
 
     def point_polygon(self, vertices, polyX, polyY, x, y):
         i = 0
@@ -448,7 +386,6 @@ class Bitmap(object):
         lim_yo2, lim_yf2 = min(list_y), max(list_y)
         lim_xo2, lim_xf2 = self.transform_xn(lim_xo2), self.transform_xn(lim_xf2)
         lim_yo2, lim_yf2 = self.transform_yn(lim_yo2), self.transform_yn(lim_yf2)
-        print("puta")
         listax, listay = self.draw_poly2(vertices)
 
         listax = list(map(lambda x: self.transform_xn(x), list_x))
@@ -460,29 +397,4 @@ class Bitmap(object):
             y = random.uniform(lim_yo2, lim_yf2)
             a = self.point_polygon(vertices_size, listax, listay, x, y)
             if a:
-                self.glVertex(x, y)
-
-    def monte_carlo_method(self, lim_xo, lim_yo, lim_xf, lim_yf):
-        self.glColor(1, 1, 1)
-        if lim_xo > lim_xf:
-            aux = lim_xo
-            lim_xo = lim_xf
-            lim_xf = aux
-        if lim_yo > lim_yf:
-            aux = lim_yo
-            lim_yo = lim_yf
-            lim_yf = aux
-        print(lim_xo)
-        print(lim_xf)
-        print(lim_yo)
-        print(lim_yf)
-        for i in range(1000000):
-            x = np.random.uniform(-1, 1)
-            y = np.random.uniform(-1, 1)
-            print("babylon")
-            print(x)
-            print(y)
-            print(self.transform_x(x))
-            print(self.transform_y(y))
-            if lim_xf > self.transform_x(x) > lim_xo and lim_yf > self.transform_y(y) > lim_yo:
                 self.glVertex(x, y)
